@@ -38,6 +38,7 @@ public class SalesNotificationListener{
   void processNotifications(Stream<SalesNotification> notificationStream) {
     notificationStream
       .map(mapSalesNotificationToSales)
-      .forEach(sales -> salesService.record(sales));
+      .peek(sales -> salesService.record(sales))
+      .count();
   }
 }
