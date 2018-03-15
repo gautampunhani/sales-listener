@@ -1,17 +1,17 @@
 package org.jpchase.codingtest.domain;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
-/**
- * Created by gautampunhani on 15/03/2018.
- */
-public class ProductSalesReport {
-  private static Logger logger = Logger.getLogger(ProductSalesReport.class.getName());
+public class ProductSalesAggregate {
   private Map<String, Double> productSales = new HashMap<>();
 
-  public void add(Sales sales) {
+  public ProductSalesAggregate(List<Sales> sales) {
+    sales.stream().forEach(this::add);
+  }
+
+  private void add(Sales sales) {
     this.productSales.put(sales.getProductType(), sales.getSalesValue() + this.productSales.getOrDefault(sales.getProductType(), 0d));
   }
 

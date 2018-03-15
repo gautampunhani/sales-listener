@@ -1,16 +1,11 @@
 package org.jpchase.codingtest.domain;
 
-/**
- * Created by gautampunhani on 15/03/2018.
- */
-public class Sales {
+import java.util.function.Function;
+
+public class Sales{
   private String productType;
   private double price;
   private int quantity;
-
-  public int getQuantity() {
-    return quantity;
-  }
 
   public double getPrice() {
     return price;
@@ -30,7 +25,11 @@ public class Sales {
     return String.format("%d of %s sold at %f", quantity, productType, price);
   }
 
-  public double getSalesValue() {
+  double getSalesValue() {
     return this.price * this.quantity;
+  }
+
+  public void adjust(Function<Double, Double> adjustPrice) {
+    this.price = adjustPrice.apply(this.price);
   }
 }

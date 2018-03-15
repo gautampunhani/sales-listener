@@ -1,32 +1,45 @@
 package org.jpchase.codingtest.service;
 
-import org.jpchase.codingtest.domain.ProductSalesReport;
+import org.jpchase.codingtest.domain.PriceAdjustment;
+import org.jpchase.codingtest.domain.ProductSalesAggregate;
 import org.jpchase.codingtest.domain.Sales;
 import org.jpchase.codingtest.repository.SalesRepository;
 
-import java.util.Map;
 import java.util.logging.Logger;
 
-/**
- * Created by gautampunhani on 15/03/2018.
- */
 public class SalesServiceImpl implements SalesService {
   private static Logger logger = Logger.getLogger(SalesServiceImpl.class.getName());
-  private SalesRepository repository;
-  private ProductSalesReport salesReport = new ProductSalesReport();
+  private SalesRepository salesRepository;
 
   public SalesServiceImpl(SalesRepository repository) {
-    this.repository = repository;
+    this.salesRepository = repository;
   }
 
   @Override
   public void record(Sales sales) {
-    this.repository.add(sales);
-    salesReport.add(sales);
+    this.salesRepository.add(sales);
+  }
+
+  @Override
+  public void adjust(PriceAdjustment priceAdjustment) {
+    salesRepository
+      .getSales().stream()
+      .filter(x -> priceAdjustment.getProductType().equals(x.getProductType()))
+      .forEach(x -> x.adjust(priceAdjustment.getAdjustmentFunction()));
+
+    salesRepository.recordAdjustmentApplied(priceAdjustment);
   }
 
   @Override
   public void publishProductSalesReport() {
+    ProductSalesAggregate salesReport = new ProductSalesAggregate(salesRepository.getSales());
     logger.info(salesReport.toString());
+  }
+
+  @Override
+  public void publishAdjustmentReport() {
+    logger.info("Following Adjustments were Applied");
+    salesRepository.getAdjustmentsApplied()
+      .forEach(adjustment -> logger.info(adjustment.toString()));
   }
 }

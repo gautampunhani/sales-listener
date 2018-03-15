@@ -10,6 +10,6 @@ dependencies {
 }
 
 task simulate(type: JavaExec) {
-    classpath sourceSets.main.runtimeClasspath
+    classpath sourceSets.test.runtimeClasspath
     main = "org.jpchase.codingtest.SalesNotificationSimulation"
 }
