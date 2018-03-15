@@ -1,10 +1,10 @@
 # Stories created:
 
-1: Record sales in the system.
-2: Log Aggregated report of product and it's value.
-3: Apply adjustments to sales
-4: Pause org.jpchase.codingtest.listener after receiving 50 messages
-5: Log report of Adjustment Operators applied
+1. Record sales in the system.
+2. Log Aggregated report of product and it's value.
+3. Apply adjustments to sales
+4. Pause org.jpchase.codingtest.listener after receiving 50 messages
+5. Log report of Adjustment Operators applied
 
 #Assumptions:
 
