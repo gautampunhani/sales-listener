@@ -1,4 +1,4 @@
-#Doubts:
+# Doubts:
 
 1. Pausing after 50 messages, does it have to re-trigger itself? Because #2 requirement says, all messages should be processed.
 2. Requirement #5, Do we need to log adjustments applied or also the amount of adjustment for a product type as well?
@@ -11,7 +11,7 @@
 4. Pause org.jpchase.codingtest.listener after receiving 50 messages
 5. Log report of Adjustment Operators applied
 
-#Assumptions:
+# Assumptions:
 
 1. Aggregated report of products should be for all the sales received till now.
 2. Adjustment Operators needs to be applied to all the recorded sales.
@@ -20,12 +20,12 @@
 5. For Doubt #1,Assuming Application will only process 50 messages.
 6. For Doubt #2, Assuming only the Adjustments applied need to be logged, not the price that got adjusted.
 
-#Prerequisites
+# Prerequisites
 
 1. Java 8
 2. Gradle 2.12
 
-#Build and Test
+# Build and Test
 
 1. For building `gradle clean build`
 2. For running unit tests `gradle clean test`
