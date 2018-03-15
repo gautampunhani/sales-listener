@@ -1,0 +1,15 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+}
+
+task simulate(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = "org.jpchase.codingtest.SalesNotificationSimulation"
+}
