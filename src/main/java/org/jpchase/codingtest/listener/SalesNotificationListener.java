@@ -1,11 +1,10 @@
 package org.jpchase.codingtest.listener;
 
-import org.jpchase.codingtest.domain.Sales;
 import org.jpchase.codingtest.dto.SalesNotification;
 import org.jpchase.codingtest.service.SalesService;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.function.Function;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 
@@ -16,7 +15,7 @@ public class SalesNotificationListener{
 
   private BlockingQueue<SalesNotification> queue;
   private SalesService salesService;
-  private Function<SalesNotification, Sales> mapSalesNotificationToSales = salesNotification -> salesNotification.getSale();
+  private AtomicInteger numberOfMessages = new AtomicInteger(0);
 
   public SalesNotificationListener(BlockingQueue<SalesNotification> queue, SalesService salesService) {
     this.queue = queue;
@@ -37,8 +36,14 @@ public class SalesNotificationListener{
 
   void processNotifications(Stream<SalesNotification> notificationStream) {
     notificationStream
-      .map(mapSalesNotificationToSales)
-      .peek(sales -> salesService.record(sales))
+      .map(SalesNotification::getSale)
+      .peek(sales -> {
+        salesService.record(sales);
+
+        if(numberOfMessages.incrementAndGet() % 10 == 0) {
+          salesService.publishProductSalesReport();
+        }
+      })
       .count();
   }
 }

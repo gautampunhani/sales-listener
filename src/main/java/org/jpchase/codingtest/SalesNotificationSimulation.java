@@ -16,10 +16,12 @@ import java.util.logging.Logger;
 public class SalesNotificationSimulation {
 
   public static void main(String[] args) {
+    //Dependency Injection
     SalesService service = new SalesServiceImpl(new SalesRepository());
+    BlockingQueue<SalesNotification> salesNotificationQueue = new ArrayBlockingQueue<>(20);
 
-    DummySalesNotificationPublisher publisher = new DummySalesNotificationPublisher();
-    SalesNotificationListener listener = new SalesNotificationListener(publisher.getSalesNotificationQueue(), service);
+    DummySalesNotificationPublisher publisher = new DummySalesNotificationPublisher(salesNotificationQueue);
+    SalesNotificationListener listener = new SalesNotificationListener(salesNotificationQueue, service);
 
     new Thread(publisher).start();
     listener.processQueue();
@@ -28,11 +30,10 @@ public class SalesNotificationSimulation {
 
 class DummySalesNotificationPublisher implements Runnable {
   private static Logger logger = Logger.getLogger(DummySalesNotificationPublisher.class.getName());
-
   private BlockingQueue<SalesNotification> salesNotificationQueue;
 
-  DummySalesNotificationPublisher() {
-    this.salesNotificationQueue = new ArrayBlockingQueue<>(20);
+  DummySalesNotificationPublisher(BlockingQueue<SalesNotification> salesNotificationQueue) {
+    this.salesNotificationQueue = salesNotificationQueue;
   }
 
   @Override
@@ -47,9 +48,5 @@ class DummySalesNotificationPublisher implements Runnable {
         logger.severe("Publisher thread interrupted");
       }
     }
-  }
-
-  public BlockingQueue<SalesNotification> getSalesNotificationQueue() {
-    return salesNotificationQueue;
   }
 }

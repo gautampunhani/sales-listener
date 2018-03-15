@@ -29,4 +29,8 @@ public class Sales {
   public String toString() {
     return String.format("%d of %s sold at %f", quantity, productType, price);
   }
+
+  public double getSalesValue() {
+    return this.price * this.quantity;
+  }
 }
